@@ -1,0 +1,55 @@
+﻿@model CodeFirstLibrary.Models.CopiesViewModel
+
+@{
+    ViewBag.Title = "Available Books";
+}
+
+<h3>Available Books</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Copies.FirstOrDefault().Book.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Authors.FirstOrDefault().Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Copies.FirstOrDefault().Branch.BranchName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Copies.FirstOrDefault().NoCopies)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Copies.Select(b => b.Book.Title).Distinct()) {
+    <tr>
+        <td class="book-title">
+            @Html.DisplayFor(modelItem => item)
+        </td>
+        <td class="book-title">
+            @Html.DisplayFor(model => model.Authors.Where(t => t.Book.Title == item).FirstOrDefault().Name)
+        </td>
+    </tr>
+    foreach (var value in Model.Copies.Where(b => b.Book.Title == item))
+    {
+    <tr>
+        <td></td>
+        <td></td>
+        <td>
+            @Html.DisplayFor(modelItem => value.Branch.BranchName)
+        </td>
+        <td align="center">
+            @Html.DisplayFor(modelItem => value.NoCopies)
+        </td>
+        <td>
+            @if (value.NoCopies > 0) {
+            @Html.ActionLink("Check Out", "Create", "Loans", new { id = value.CopiesID }, new { })
+            }
+        </td>
+    </tr>
+        }
+    }
+
+</table>
